@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Navigators = () => {
-    const [isSignedIn, setIsSignedIn] = useState(true);
+    const [isSignedIn, setIsSignedIn] = useState(false);
     if(isSignedIn == true){
         return (
             <NavigationContainer>
