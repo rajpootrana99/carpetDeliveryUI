@@ -26,19 +26,39 @@ const Home = ({ navigation }) => {
     setText(val);
   };
   const [carpetService, setCarpetService] = useState([
-    { key: 1, name: "Carpet Cleaning", photo: Images.CARPET_CLEANING },
-    { key: 2, name: "Carpet Repairing", photo: Images.CARPET_REPAIRING },
-    { key: 3, name: "Carpet Stretching", photo: Images.CARPET_STRETCHING },
-    { key: 4, name: "Upholstrey Cleaning", photo: Images.UPHOLSTERY_CLEANING },
+    { key: 1,
+      name: "Carpet Cleaning", 
+      photo: Images.CARPET_CLEANING, 
+      price: 400, 
+      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
+    { key: 2, 
+      name: "Carpet Repairing", 
+      photo: Images.CARPET_REPAIRING, 
+      price: 1000, 
+      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
+    { key: 3, 
+      name: "Carpet Stretching", 
+      photo: Images.CARPET_STRETCHING, 
+      price: 1500, 
+      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
+    { key: 4, 
+      name: "Upholstrey Cleaning", 
+      photo: Images.UPHOLSTERY_CLEANING, 
+      price: 2000, 
+      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
     {
       key: 5,
       name: "Hardwood Floor Cleaning",
       photo: Images.HARDWOOD_FLOOR_CLEANING,
+      price: 2500,
+      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou",
     },
     {
       key: 6,
       name: "Flooring Installation",
       photo: Images.FLOORING_INSTALLATION,
+      price: 3000,
+      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou",
     },
   ]);
 
@@ -105,7 +125,7 @@ const Home = ({ navigation }) => {
             numColumns={3}
             data={carpetService}
             keyExtractor={(item) => item.key}
-            renderItem={({ item }) => <ServiceList {...item} />}
+            renderItem={({ item }) => <ServiceList {...item} onPress={(selectedService) => navigation.navigate('ServiceDetail', {selectedService})} />}
           />
         </View>
       </View>
@@ -115,7 +135,6 @@ const Home = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 40,
     flex: 1,
     backgroundColor: Colors.DEFAULT_LIGHT,
   },
@@ -166,6 +185,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     alignItems: "flex-start",
     paddingHorizontal: 10,
+    marginHorizontal: 10,
   },
 });
 

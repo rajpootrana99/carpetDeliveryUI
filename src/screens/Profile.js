@@ -1,23 +1,40 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, StatusBar, ScrollView } from "react-native";
+import { StyleSheet, Text, View, StatusBar, ScrollView, Linking } from "react-native";
 import { Separator, ProfileEdit } from "../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Colors } from "../contants";
 
 const Profile = ({ navigation }) => {
+  const [phone, setPhone] = useState('+1 8822882288')
   const [profileEdit, setProfileEdit] = useState([
-    { name: "Call Us", icon: "ios-logo-whatsapp" },
-    { name: "Help Center", icon: "ios-help-circle" },
-    { name: "Manage Address", icon: "ios-location-sharp" },
-    { name: "Pricing", icon: "ios-pricetag" },
-    { name: "Setting", icon: "ios-settings" },
-    { name: "Schedule Booking", icon: "ios-calendar" },
-    { name: "Payment Option", icon: "ios-card-sharp" },
-    { name: "Rate Us", icon: "ios-star" },
-    { name: "Reviews", icon: "ios-eye" },
-    { name: "Share Michelangelo Enterprises", icon: "ios-share-social" },
-    { name: "Log Out", icon: "md-log-out-outline" },
+    { id: 1, name: "Call Us", icon: "ios-logo-whatsapp" },
+    { id: 2, name: "Help Center", icon: "ios-help-circle" },
+    { id: 3, name: "Manage Address", icon: "ios-location-sharp" },
+    { id: 4, name: "Pricing", icon: "ios-pricetag" },
+    { id: 5, name: "Setting", icon: "ios-settings" },
+    { id: 6, name: "Schedule Booking", icon: "ios-calendar" },
+    { id: 7, name: "Payment Option", icon: "ios-card-sharp" },
+    { id: 8, name: "Rate Us", icon: "ios-star" },
+    { id: 9, name: "Reviews", icon: "ios-eye" },
+    { id: 10, name: "Share Michelangelo Enterprises", icon: "ios-share-social" },
+    { id: 11, name: "Log Out", icon: "md-log-out-outline" },
   ]);
+
+  const chooseScreen = (key) => {
+    if(key.id == 1){
+      let phoneNumber = '';
+      if (Platform.OS === 'android') {
+        phoneNumber = 'tel:${+1 8822882288}';
+      }
+      else {
+        phoneNumber = 'telprompt:${+1 8822882288}';
+      }
+      Linking.openURL(phoneNumber);
+      }
+    if (key.id == 7){
+      navigation.navigate('PaymentOption');
+    }
+  }
   return (
     <View style={styles.container}>
       <Separator height={StatusBar.currentHeight} />
@@ -33,7 +50,7 @@ const Profile = ({ navigation }) => {
       <View style={styles.headerDownBar}>
         <View>
           <Text style={styles.textBold}>John Parker</Text>
-          <Text style={styles.textLight}>+1 8822882288</Text>
+          <Text style={styles.textLight}>{phone}</Text>
         </View>
         <Ionicons
           name="ios-pencil"
@@ -44,7 +61,7 @@ const Profile = ({ navigation }) => {
       </View>
       <ScrollView>
         {profileEdit.map((item) => (
-          <ProfileEdit {...item} />
+          <ProfileEdit {...item} onPress={(key) => chooseScreen(key)} />
         ))}
       </ScrollView>
     </View>
@@ -53,7 +70,6 @@ const Profile = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 40,
     flex: 1,
     backgroundColor: Colors.DEFAULT_LIGHT,
     // alignItems: 'center',

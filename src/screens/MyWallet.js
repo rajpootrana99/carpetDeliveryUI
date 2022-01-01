@@ -41,7 +41,6 @@ const MyWallet = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 40,
     flex: 1,
     backgroundColor: Colors.DEFAULT_LIGHT,
     // alignItems: 'center',

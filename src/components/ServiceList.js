@@ -1,15 +1,16 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const ServiceList = ({name, photo}) => {
+const ServiceList = ({name, photo, price, description, onPress}) => {
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={() => onPress({name, photo, price, description})}>
             <Image 
                 source={photo}
                 style={styles.serviceImage}
             />
             <Text style={styles.serviceTitle}>{name}</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 
@@ -18,6 +19,7 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 10,
         padding: 10,
+        width: 90,
         alignSelf: 'center',
         borderWidth: 1,
         borderRadius: 5,

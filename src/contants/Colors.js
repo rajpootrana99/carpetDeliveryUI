@@ -4,5 +4,6 @@ export default {
     DEFAULT_LIGHT: '#EDEDED',
     DEFAULT_LIGHT_GREY: '#AEAEAE',
     DEFAULT_BLACK: '#000000',
-    ICON_GREY: '#343434'
+    ICON_GREY: '#343434',
+    WHITE: '#FFFFFF',
 };

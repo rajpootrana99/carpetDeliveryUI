@@ -78,7 +78,7 @@ const Verification = ({navigation, route: {params: {phoneNumber}}}) => {
         </View>
       </View>
       <TouchableOpacity style={styles.login} activeOpacity={0.8}
-        onPress={() => navigation.navigate('Home')}>
+        onPress={() => navigation.navigate('HomeNav')}>
         <Text style={styles.btnText}>Login</Text>
       </TouchableOpacity>
     </View>

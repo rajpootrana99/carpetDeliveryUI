@@ -1,18 +1,18 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../contants';
 
-const ProfileEdit = ({name, icon}) => {
+const ProfileEdit = ({id, name, icon, onPress}) => {
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress = { () => onPress({id}) }>
             <Ionicons
                 name={icon}
                 size={24}
                 color={Colors.DEFAULT_GREY}
                 />
             <Text style={styles.profileText}>{name}</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 
