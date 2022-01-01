@@ -34,6 +34,9 @@ const Profile = ({ navigation }) => {
     if (key.id == 7){
       navigation.navigate('PaymentOption');
     }
+    if (key.id == 11){
+      navigation.navigate('PhoneRegister');
+    }
   }
   return (
     <View style={styles.container}>
