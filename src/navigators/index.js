@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { PhoneRegister, Verification, Home, Booking, MyWallet, Profile, ServiceDetail, PaymentOption } from "../screens";
+import { PhoneRegister, Verification, Home, Booking, MyWallet, Profile, ServiceDetail, PaymentOption, HelpCenter, ManageAddress, ScheduleBooking } from "../screens";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,6 +48,9 @@ const Navigators = () => {
                 <Stack.Screen name="HomeNav" component={HomeNav} />
                 <Stack.Screen name="ServiceDetail" component={ServiceDetail} />
                 <Stack.Screen name="PaymentOption" component={PaymentOption} />
+                <Stack.Screen name="HelpCenter" component={HelpCenter} />
+                <Stack.Screen name="ManageAddress" component={ManageAddress} />
+                <Stack.Screen name="ScheduleBooking" component={ScheduleBooking} />
             </Stack.Navigator>
         </NavigationContainer>
     );

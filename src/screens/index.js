@@ -6,5 +6,19 @@ import MyWallet from "./MyWallet";
 import Profile from "./Profile";
 import ServiceDetail from "./ServiceDetail"
 import PaymentOption from "./PaymentOption"
+import HelpCenter from "./HelpCenter";
+import ManageAddress from "./ManageAddress";
+import ScheduleBooking from "./ScheduleBooking"
 
-export {PhoneRegister, Verification, Home, Booking, MyWallet, Profile, ServiceDetail, PaymentOption};
+export {PhoneRegister, 
+        Verification, 
+        Home, 
+        Booking, 
+        MyWallet, 
+        Profile, 
+        ServiceDetail, 
+        PaymentOption, 
+        HelpCenter,
+        ManageAddress,
+        ScheduleBooking,
+    };

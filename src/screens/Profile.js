@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, StatusBar, ScrollView, Linking } from "react-native";
+import { StyleSheet, Text, View, StatusBar, ScrollView, Linking, Share } from "react-native";
 import { Separator, ProfileEdit } from "../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Colors } from "../contants";
@@ -11,7 +11,7 @@ const Profile = ({ navigation }) => {
     { id: 2, name: "Help Center", icon: "ios-help-circle" },
     { id: 3, name: "Manage Address", icon: "ios-location-sharp" },
     { id: 4, name: "Pricing", icon: "ios-pricetag" },
-    { id: 5, name: "Setting", icon: "ios-settings" },
+    { id: 5, name: "Settings", icon: "ios-settings" },
     { id: 6, name: "Schedule Booking", icon: "ios-calendar" },
     { id: 7, name: "Payment Option", icon: "ios-card-sharp" },
     { id: 8, name: "Rate Us", icon: "ios-star" },
@@ -19,6 +19,27 @@ const Profile = ({ navigation }) => {
     { id: 10, name: "Share Michelangelo Enterprises", icon: "ios-share-social" },
     { id: 11, name: "Log Out", icon: "md-log-out-outline" },
   ]);
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        title: 'App link',
+        message: 'Please install this app and stay safe , AppLink :https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en', 
+        url: 'https://play.google.com/store/apps/details?id=nic.goi.aarogyasetu&hl=en'
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   const chooseScreen = (key) => {
     if(key.id == 1){
@@ -30,9 +51,21 @@ const Profile = ({ navigation }) => {
         phoneNumber = 'telprompt:${+1 8822882288}';
       }
       Linking.openURL(phoneNumber);
-      }
+    }
+    if (key.id == 2){
+      navigation.navigate('HelpCenter');
+    }
+    if (key.id == 3){
+      navigation.navigate('ManageAddress');
+    }
+    if (key.id == 6){
+      navigation.navigate('ScheduleBooking');
+    }
     if (key.id == 7){
       navigation.navigate('PaymentOption');
+    }
+    if (key.id == 10){
+      onShare();
     }
     if (key.id == 11){
       navigation.navigate('PhoneRegister');
