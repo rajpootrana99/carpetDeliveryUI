@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
   StatusBar,
+  ActivityIndicator,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Carousel, { Pagination } from "react-native-snap-carousel";
@@ -19,48 +20,28 @@ const { width } = Dimensions.get("window");
 const SPACING = 10;
 const THUMB_SIZE = 80;
 
+const servicesURL = 'http://192.168.10.3:8000/api/fetchServices';
+
 const Home = ({ navigation }) => {
   const [text, setText] = useState("");
 
   const changeHandler = (val) => {
     setText(val);
   };
-  const [carpetService, setCarpetService] = useState([
-    { key: 1,
-      name: "Carpet Cleaning", 
-      photo: Images.CARPET_CLEANING, 
-      price: 400, 
-      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
-    { key: 2, 
-      name: "Carpet Repairing", 
-      photo: Images.CARPET_REPAIRING, 
-      price: 1000, 
-      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
-    { key: 3, 
-      name: "Carpet Stretching", 
-      photo: Images.CARPET_STRETCHING, 
-      price: 1500, 
-      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
-    { key: 4, 
-      name: "Upholstrey Cleaning", 
-      photo: Images.UPHOLSTERY_CLEANING, 
-      price: 2000, 
-      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
-    {
-      key: 5,
-      name: "Hardwood Floor Cleaning",
-      photo: Images.HARDWOOD_FLOOR_CLEANING,
-      price: 2500,
-      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou",
-    },
-    {
-      key: 6,
-      name: "Flooring Installation",
-      photo: Images.FLOORING_INSTALLATION,
-      price: 3000,
-      description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou",
-    },
-  ]);
+  const [isLoading, setLoading] = useState(false);
+  const [carpetService, setCarpetService] = useState([]);
+
+  const getServices = () => {
+    fetch(servicesURL)
+      .then((response) => response.json())
+      .then((json) => setCarpetService(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+    }
+    useEffect(() => {
+        setLoading(true);
+        getServices();
+    }, []);
 
   const [images, setImages] = useState([
     { id: "1", image: Images.RECTANGLE },
@@ -121,12 +102,13 @@ const Home = ({ navigation }) => {
       <View style={styles.containerBody}>
         <Text style={styles.bodyTitle}>Our Services</Text>
         <View style={styles.serviceListContainer}>
-          <FlatList
+          {isLoading ? (<ActivityIndicator />) :
+          (<FlatList
             numColumns={3}
             data={carpetService}
-            keyExtractor={(item) => item.key}
+            keyExtractor={(item) => item.id}
             renderItem={({ item }) => <ServiceList {...item} onPress={(selectedService) => navigation.navigate('ServiceDetail', {selectedService})} />}
-          />
+          />)}
         </View>
       </View>
     </View>

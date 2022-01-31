@@ -18,7 +18,7 @@ const ServiceDetail = ({navigation, route: {params: {selectedService}}}) => {
                 <Text style={styles.headerTitle}>{selectedService.name}</Text>
             </View>
             <Image 
-                source={selectedService.photo}
+                source={{ uri: 'http://192.168.10.3:8000/storage'+selectedService.image}}
                 style={styles.serviceImage}
             />
             <Text style={styles.serviceTitle}>{selectedService.name}</Text>
