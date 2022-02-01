@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,18 +6,30 @@ import {
   StatusBar,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Separator } from "../components";
 import { Service } from "../components";
 import { Colors } from "../contants";
 
+const bookingsURL = 'http://192.168.10.10:8000/api/fetchBookings';
+
 const Booking = ({ navigation }) => {
-  const [serviceList, setServiceList] = useState([
-    { name: "Booking Name", date: "Booking Date", status: "Done" },
-    { name: "Booking Name", date: "Booking Date", status: "pending" },
-    { name: "Booking Name", date: "Booking Date", status: "Done" },
-  ]);
+  const [serviceList, setServiceList] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
+  const getBookings = () => {
+    fetch(bookingsURL)
+      .then((response) => response.json())
+      .then((json) => setServiceList(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+    }
+    useEffect(() => {
+        setLoading(true);
+        getBookings();
+    }, []);
   return (
     <View style={styles.container}>
       <Separator height={StatusBar.currentHeight} />

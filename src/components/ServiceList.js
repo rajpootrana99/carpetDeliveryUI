@@ -2,11 +2,11 @@ import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const ServiceList = ({name, image, price, description, onPress}) => {
+const ServiceList = ({id, name, image, price, description, onPress}) => {
     return (
-        <TouchableOpacity style={styles.container} onPress={() => onPress({name, image, price, description})}>
+        <TouchableOpacity style={styles.container} onPress={() => onPress({id, name, image, price, description})}>
             <Image 
-                source={{ uri: 'http://192.168.10.3:8000/storage'+image }}
+                source={{ uri: 'http://192.168.10.10:8000/storage'+image }}
                 style={styles.serviceImage}
             />
             <Text style={styles.serviceTitle}>{name}</Text>

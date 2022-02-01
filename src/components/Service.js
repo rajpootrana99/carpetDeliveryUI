@@ -2,10 +2,10 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Colors } from '../contants'
 
-const Service = ({name, date, status}) => {
+const Service = ({service, date, status}) => {
     return (
         <View style={styles.serviceContainer}>
-            <Text style={styles.serviceTitle}>{name}</Text>
+            <Text style={styles.serviceTitle}>{service.name}</Text>
             <Text style={styles.serviceDate}>{date}</Text>
             <Text style={styles.textLight}>Status: <Text style={styles.serviceStatus}>*{status}</Text></Text>
         </View>
