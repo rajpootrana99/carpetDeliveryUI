@@ -14,21 +14,28 @@ import { Service } from "../components";
 import { Colors } from "../contants";
 
 const bookingsURL = 'http://192.168.10.10:8000/api/fetchBookings';
+let repeat;
 
 const Booking = ({ navigation }) => {
   const [serviceList, setServiceList] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
-  const getBookings = () => {
-    fetch(bookingsURL)
+  async function getBookings() {
+    await fetch(bookingsURL)
       .then((response) => response.json())
       .then((json) => setServiceList(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
+      repeat = setTimeout(getBookings, 30000);
     }
     useEffect(() => {
         setLoading(true);
         getBookings();
+        return () => {
+          if (repeat) {
+              clearTimeout(repeat);
+          }
+      }
     }, []);
   return (
     <View style={styles.container}>
