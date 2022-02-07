@@ -7,6 +7,9 @@ import { StaticImageService } from "../services";
 import CountryFlag from "react-native-country-flag";
 import { FlatList } from 'react-native-gesture-handler';
 import FlagItem from '../components/FlagItem';
+import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
+import { initializeApp, getApp } from 'firebase/app';
+import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
 
 const getDropdownStyle = (y) => ({...styles.countryDropdown, top: y + 60})
 
@@ -28,8 +31,23 @@ const PhoneRegister = ({navigation}) => {
       }
     }
   }
+  // Firebase Mobile Auth
+  const recaptchaVerifier = React.useRef(null);
+  const [phoneNumber, setPhoneNumber] = React.useState();
+  const [verificationId, setVerificationId] = React.useState();
+  const [verificationCode, setVerificationCode] = React.useState();
+
+  const firebaseConfig = app ? app.options : undefined;
+  const [message, showMessage] = React.useState();
+  const attemptInvisibleVerification = false;
+
   return (
     <View style={styles.container} onStartShouldSetResponder={({nativeEvent: {pageX, pageY}}) => closeDropdown(pageX, pageY)}>
+      <FirebaseRecaptchaVerifierModal
+        ref={recaptchaVerifier}
+        firebaseConfig={app.options}
+        // attemptInvisibleVerification
+      />
       <Image source={Images.LOGO}
         resizeMode="contain" 
         style={styles.logo}/>
@@ -72,7 +90,26 @@ const PhoneRegister = ({navigation}) => {
         </View>
       )}
       <TouchableOpacity style={styles.continue} activeOpacity={0.8} 
-        onPress={() => navigation.navigate('Verification', {phoneNumber})}>
+        onPress={
+          async () => {
+            // The FirebaseRecaptchaVerifierModal ref implements the
+            // FirebaseAuthApplicationVerifier interface and can be
+            // passed directly to `verifyPhoneNumber`.
+            try {
+              const phoneProvider = new PhoneAuthProvider(auth);
+              const verificationId = await phoneProvider.verifyPhoneNumber(
+                phoneNumber,
+                recaptchaVerifier.current
+              );
+              setVerificationId(verificationId);
+              showMessage({
+                text: 'Verification code has been sent to your phone.',
+              });
+              navigation.navigate('Verification', {phoneNumber})
+            } catch (err) {
+              showMessage({ text: `Error: ${err.message}`, color: 'red' });
+            }
+          }}>
         <Text style={styles.btnText}>Continue</Text>
       </TouchableOpacity>
       <Image source={Images.CLEANER_VECTOR}

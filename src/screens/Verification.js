@@ -4,9 +4,8 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors, Images } from '../contants';
-import Navigators from '../navigators';
 
-const Verification = ({navigation, route: {params: {phoneNumber}}}) => {
+const Verification = ({navigation, route: {params: {phoneNumber, confirmation}}}) => {
 
   const firstInput = useRef();
   const secondInput = useRef();

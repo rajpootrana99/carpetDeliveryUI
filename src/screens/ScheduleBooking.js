@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Image } from "react-native"
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Image, Button } from "react-native"
 import { Separator, BookingDropdown } from "../components"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { Colors, Images } from "../contants"
 import { FlatList } from 'react-native-gesture-handler';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const getDropdownStyle = (y) => ({...styles.serviceDropdown, top: y + 60})
 
@@ -57,15 +58,35 @@ const ScheduleBooking = ({ navigation }) => {
         description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou",
     });
     const closeDropdown = (pageX, pageY) => {
-    if(isDropdownOpen){
-        if(pageX < dropdownLayout?.x || 
-        pageX > dropdownLayout?.x + dropdownLayout?.width || 
-        pageY < dropdownLayout?.y || 
-        pageY > dropdownLayout?.y + dropdownLayout?.height){
-            setIsDropdownOpen(false);
+        if(isDropdownOpen){
+            if(pageX < dropdownLayout?.x || 
+            pageX > dropdownLayout?.x + dropdownLayout?.width || 
+            pageY < dropdownLayout?.y || 
+            pageY > dropdownLayout?.y + dropdownLayout?.height){
+                setIsDropdownOpen(false);
+            }
         }
     }
-    }
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+        console.log(date);
+    };
+
+    const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+    };
+
+    const showDatepicker = () => {
+        showMode('date');
+    };
+
     return (
         <View style={styles.container} onStartShouldSetResponder={({nativeEvent: {pageX, pageY}}) => closeDropdown(pageX, pageY)}>
             <Separator height={StatusBar.currentHeight} />
@@ -109,6 +130,19 @@ const ScheduleBooking = ({ navigation }) => {
                 />
                 </View>
             )}
+            <TouchableOpacity style={styles.dateStyle} onPress={showDatepicker}>
+                <Text style={styles.dateText}>Select Date</Text>
+            </TouchableOpacity>
+            {show && (
+                <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={false}
+                    display="default"
+                    onChange={onChange}
+                />
+            )}
         </View>
     )
 }
@@ -139,6 +173,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: 30,
         marginVertical: 20,
+    },
+    dateStyle: {
+        alignItems: 'center',
+        backgroundColor: Colors.DEFAULT_BLUE,
+        marginHorizontal: 40,
+        padding: 15,
+        borderRadius: 5,
+    },
+    dateText: {
+        color: Colors.WHITE,
+        fontSize: 14,
     },
     serviceIcon: {
         height: 20,
