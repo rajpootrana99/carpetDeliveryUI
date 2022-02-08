@@ -1,130 +1,138 @@
-import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
-import { Colors, Images, CountryCode } from '../contants';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { StaticImageService } from "../services";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
+import { Colors, Images, CountryCode } from "../contants";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import CountryFlag from "react-native-country-flag";
-import { FlatList } from 'react-native-gesture-handler';
-import FlagItem from '../components/FlagItem';
-import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
-import { initializeApp, getApp } from 'firebase/app';
-import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
+import { FlatList } from "react-native-gesture-handler";
+import FlagItem from "../components/FlagItem";
+import firebase from "../firebase";
+const getDropdownStyle = (y) => ({ ...styles.countryDropdown, top: y + 60 });
 
-const getDropdownStyle = (y) => ({...styles.countryDropdown, top: y + 60})
-
-const PhoneRegister = ({navigation}) => {
+const PhoneRegister = ({ navigation }) => {
   const [selectedCountry, setSelectedCountry] = useState(
-    CountryCode.find(country => country.name == "Pakistan"),
-    );
+    CountryCode.find((country) => country.name == "Pakistan")
+  );
   const [inputsContainerY, setInputsContainerY] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [dropdownLayout, setDropdownLayout] = useState({});
-  const [phoneNumber, setPhoneNumber] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState("");
   const closeDropdown = (pageX, pageY) => {
-    if(isDropdownOpen){
-      if(pageX < dropdownLayout?.x || 
-        pageX > dropdownLayout?.x + dropdownLayout?.width || 
-        pageY < dropdownLayout?.y || 
-        pageY > dropdownLayout?.y + dropdownLayout?.height){
-          setIsDropdownOpen(false);
+    if (isDropdownOpen) {
+      if (
+        pageX < dropdownLayout?.x ||
+        pageX > dropdownLayout?.x + dropdownLayout?.width ||
+        pageY < dropdownLayout?.y ||
+        pageY > dropdownLayout?.y + dropdownLayout?.height
+      ) {
+        setIsDropdownOpen(false);
       }
     }
-  }
+  };
   // Firebase Mobile Auth
-  const recaptchaVerifier = React.useRef(null);
   const [phoneNumber, setPhoneNumber] = React.useState();
-  const [verificationId, setVerificationId] = React.useState();
-  const [verificationCode, setVerificationCode] = React.useState();
-
-  const firebaseConfig = app ? app.options : undefined;
-  const [message, showMessage] = React.useState();
-  const attemptInvisibleVerification = false;
-
+  const { auth } = firebase();
+  const { confirm, setConfirm } = React.useState(null);
+  const { code, setCode } = React.useState("");
+  const signInWithPhoneNumber = async (phoneNumber) => {
+    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+    setConfirm(confirmation);
+  };
   return (
-    <View style={styles.container} onStartShouldSetResponder={({nativeEvent: {pageX, pageY}}) => closeDropdown(pageX, pageY)}>
-      <FirebaseRecaptchaVerifierModal
-        ref={recaptchaVerifier}
-        firebaseConfig={app.options}
-        // attemptInvisibleVerification
-      />
-      <Image source={Images.LOGO}
-        resizeMode="contain" 
-        style={styles.logo}/>
+    <View
+      style={styles.container}
+      onStartShouldSetResponder={({ nativeEvent: { pageX, pageY } }) =>
+        closeDropdown(pageX, pageY)
+      }
+    >
+      <Image source={Images.LOGO} resizeMode="contain" style={styles.logo} />
       <Text style={styles.textBold}>Your Carpet Service Expert</Text>
       <Text style={styles.textLight}>Affordable • Trusted</Text>
-      <View style={styles.inputsContainer} onLayout={({
-        nativeEvent: {
-          layout: {y},
-        },
-      }) => setInputsContainerY(y)}>
-        <TouchableOpacity style={styles.countryListContainer} onPress={() => setIsDropdownOpen(!isDropdownOpen)}>
+      <View
+        style={styles.inputsContainer}
+        onLayout={({
+          nativeEvent: {
+            layout: { y },
+          },
+        }) => setInputsContainerY(y)}
+      >
+        <TouchableOpacity
+          style={styles.countryListContainer}
+          onPress={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
           <CountryFlag isoCode={selectedCountry.code} size={14} />
-          <Text style={styles.countryCodeText}>{ selectedCountry.dial_code }</Text>
+          <Text style={styles.countryCodeText}>
+            {selectedCountry.dial_code}
+          </Text>
           <MaterialIcons name="keyboard-arrow-down"></MaterialIcons>
         </TouchableOpacity>
         <View style={styles.phoneInputContainer}>
-        <TextInput placeholder="Phone Number"
-          placeholderTextColor={Colors.DEFAULT_LIGHT_GREY}
-          keyboardType="number-pad"
-          onFocus={() => setIsDropdownOpen(false)}
-          onChangeText={(text) => setPhoneNumber(selectedCountry?.dial_code + text)}
-        />
+          <TextInput
+            placeholder="Phone Number"
+            placeholderTextColor={Colors.DEFAULT_LIGHT_GREY}
+            keyboardType="number-pad"
+            onFocus={() => setIsDropdownOpen(false)}
+            onChangeText={(text) =>
+              setPhoneNumber(selectedCountry?.dial_code + text)
+            }
+          />
         </View>
       </View>
       {isDropdownOpen && (
-        <View style={getDropdownStyle(inputsContainerY)} 
+        <View
+          style={getDropdownStyle(inputsContainerY)}
           onLayout={({
             nativeEvent: {
-              layout: {x, y, height, width},
-              },
-              }) => setDropdownLayout({x, y, height, width})}>
+              layout: { x, y, height, width },
+            },
+          }) => setDropdownLayout({ x, y, height, width })}
+        >
           <FlatList
             data={CountryCode}
             keyExtractor={(item) => item.code}
-            renderItem={({item}) => <FlagItem {...item} onPress={(country) => {
-              setSelectedCountry(country)
-              setIsDropdownOpen(false)
-            }}/>} 
+            renderItem={({ item }) => (
+              <FlagItem
+                {...item}
+                onPress={(country) => {
+                  setSelectedCountry(country);
+                  setIsDropdownOpen(false);
+                }}
+              />
+            )}
           />
         </View>
       )}
-      <TouchableOpacity style={styles.continue} activeOpacity={0.8} 
-        onPress={
-          async () => {
-            // The FirebaseRecaptchaVerifierModal ref implements the
-            // FirebaseAuthApplicationVerifier interface and can be
-            // passed directly to `verifyPhoneNumber`.
-            try {
-              const phoneProvider = new PhoneAuthProvider(auth);
-              const verificationId = await phoneProvider.verifyPhoneNumber(
-                phoneNumber,
-                recaptchaVerifier.current
-              );
-              setVerificationId(verificationId);
-              showMessage({
-                text: 'Verification code has been sent to your phone.',
-              });
-              navigation.navigate('Verification', {phoneNumber})
-            } catch (err) {
-              showMessage({ text: `Error: ${err.message}`, color: 'red' });
-            }
-          }}>
+      <TouchableOpacity
+        style={styles.continue}
+        activeOpacity={0.8}
+        onPress={async () => {
+          signInWithPhoneNumber("+923216316351");
+          // navigation.navigate("Verification", { phoneNumber });
+        }}
+      >
         <Text style={styles.btnText}>Continue</Text>
       </TouchableOpacity>
-      <Image source={Images.CLEANER_VECTOR}
-        resizeMode="contain" 
-        style={styles.cleaner}/>
+      <Image
+        source={Images.CLEANER_VECTOR}
+        resizeMode="contain"
+        style={styles.cleaner}
+      />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     // alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: "center",
     // paddingTop: 180,
   },
   logo: {
@@ -155,7 +163,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: "white",
     fontSize: 15,
-    textAlign: 'center',
+    textAlign: "center",
     fontWeight: "700",
   },
   cleaner: {
@@ -164,8 +172,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 80,
   },
   inputsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginHorizontal: 30,
     marginVertical: 20,
   },
@@ -175,11 +183,11 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 8,
     height: 50,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
+    justifyContent: "space-evenly",
+    alignItems: "center",
     borderWidth: 0.5,
     borderColor: Colors.DEFAULT_GREY,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   phoneInputContainer: {
     backgroundColor: Colors.DEFAULT_LIGHT,
@@ -188,12 +196,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 0.5,
     borderColor: Colors.DEFAULT_GREY,
-    justifyContent: 'center',
+    justifyContent: "center",
     flex: 1,
   },
   countryDropdown: {
     backgroundColor: Colors.DEFAULT_LIGHT,
-    position: 'absolute',
+    position: "absolute",
     width: 300,
     height: 200,
     marginLeft: 30,
@@ -201,7 +209,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: Colors.DEFAULT_GREY,
     zIndex: 3,
-  }
+  },
 });
 
 export default PhoneRegister;

@@ -1,23 +1,24 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import * as React from "react";
+import firebase from "@react-native-firebase/app";
+import auth from "@react-native-firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyASEsDOndU1NmWg6T3ZfqF1zbRS31ow2kQ",
-  authDomain: "carpetdelivery-2b983.firebaseapp.com",
-  projectId: "carpetdelivery-2b983",
-  storageBucket: "carpetdelivery-2b983.appspot.com",
-  messagingSenderId: "976307311136",
-  appId: "1:976307311136:web:ef3eefe4f5e2d2c0dfe245"
+  apiKey: "AIzaSyDMMJEFJUY8042Pg1MY7wvqbiTqCAGCP-Y",
+  authDomain: "carpet-cleaning-2062b.firebaseapp.com",
+  projectId: "carpet-cleaning-2062b",
+  storageBucket: "carpet-cleaning-2062b.appspot.com",
+  messagingSenderId: "542236558748",
+  appId: "1:542236558748:web:dbc30b95c159f363ae7459",
+  measurementId: "G-BEWBN5J1Q4",
 };
 
-let app;
-
-if (firebase.apps.length === 0) {
-  app = firebase.initializeApp(firebaseConfig)
-} else {
-  app = firebase.app();
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
 }
 
-const auth = firebase.auth();
-
-export { auth };
+export default () => {
+  return {
+    firebase,
+    auth,
+  };
+};

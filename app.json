@@ -17,16 +17,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shammarafzal.CarpetDelivery"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.shammarafzal.CarpetDelivery"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Carpet App",
+    "githubUrl": "https://github.com/rajpootrana99/carpetDeliveryUI.git"
   }
 }
