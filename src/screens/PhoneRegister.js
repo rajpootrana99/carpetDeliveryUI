@@ -36,13 +36,14 @@ const PhoneRegister = ({ navigation }) => {
     }
   };
   // Firebase Mobile Auth
-  const [phoneNumber, setPhoneNumber] = React.useState();
+  const [phoneNumber, setPhoneNumber] = useState("");
   const { auth } = firebase();
   const { confirm, setConfirm } = React.useState(null);
   const { code, setCode } = React.useState("");
   const signInWithPhoneNumber = async (phoneNumber) => {
     const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
     setConfirm(confirmation);
+    navigation.navigate("Verification", { phoneNumber, confirmation })
   };
   return (
     <View
@@ -112,8 +113,7 @@ const PhoneRegister = ({ navigation }) => {
         style={styles.continue}
         activeOpacity={0.8}
         onPress={async () => {
-          signInWithPhoneNumber("+923216316351");
-          // navigation.navigate("Verification", { phoneNumber });
+          signInWithPhoneNumber(phoneNumber);
         }}
       >
         <Text style={styles.btnText}>Continue</Text>
