@@ -3,13 +3,13 @@ import { StyleSheet, Text, View, Image} from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Colors } from '../contants'
 
-const BookingDropdown = ({ key, name, photo, onPress }) => {
+const BookingDropdown = ({ id, name, image, onPress }) => {
     return (
         <TouchableOpacity 
             style={styles.container} 
-            onPress={() => onPress({key, name, photo})}>
+            onPress={() => onPress({id, name, image})}>
             <Image 
-                source={photo}
+                source={{ uri: 'http://192.168.10.2:8000/storage'+image }}
                 style={styles.serviceIcon}
             />
             <Text style={styles.serviceText}>{name}</Text>

@@ -20,7 +20,7 @@ const { width } = Dimensions.get("window");
 const SPACING = 10;
 const THUMB_SIZE = 80;
 
-const servicesURL = 'http://192.168.10.10:8000/api/fetchServices';
+const servicesURL = 'http://192.168.10.2:8000/api/fetchServices';
 
 const Home = ({ navigation }) => {
   const [text, setText] = useState("");

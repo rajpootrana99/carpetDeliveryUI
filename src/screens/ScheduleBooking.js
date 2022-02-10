@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Image, Button } from "react-native"
 import { Separator, BookingDropdown } from "../components"
 import Ionicons from "react-native-vector-icons/Ionicons"
@@ -8,55 +8,25 @@ import { FlatList } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const getDropdownStyle = (y) => ({...styles.serviceDropdown, top: y + 60})
+const servicesURL = 'http://192.168.10.2:8000/api/fetchServices';
 
 const ScheduleBooking = ({ navigation }) => {
-    const [carpetService, setCarpetService] = useState([
-        { key: 1,
-          name: "Carpet Cleaning", 
-          photo: Images.CARPET_CLEANING, 
-          price: 400, 
-          description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
-        { key: 2, 
-          name: "Carpet Repairing", 
-          photo: Images.CARPET_REPAIRING, 
-          price: 1000, 
-          description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
-        { key: 3, 
-          name: "Carpet Stretching", 
-          photo: Images.CARPET_STRETCHING, 
-          price: 1500, 
-          description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
-        { key: 4, 
-          name: "Upholstrey Cleaning", 
-          photo: Images.UPHOLSTERY_CLEANING, 
-          price: 2000, 
-          description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou" },
-        {
-          key: 5,
-          name: "Hardwood Floor Cleaning",
-          photo: Images.HARDWOOD_FLOOR_CLEANING,
-          price: 2500,
-          description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou",
-        },
-        {
-          key: 6,
-          name: "Flooring Installation",
-          photo: Images.FLOORING_INSTALLATION,
-          price: 3000,
-          description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou",
-        },
-      ]);
+    const [carpetService, setCarpetService] = useState([]);
+    const getServices = () => {
+        fetch(servicesURL)
+          .then((response) => response.json())
+          .then((json) => setCarpetService(json))
+          .catch((error) => console.error(error))
+          .finally(() => setLoading(false));
+        }
+        useEffect(() => {
+            getServices();
+        }, []);
 
     const [inputsContainerY, setInputsContainerY] = useState(0);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [dropdownLayout, setDropdownLayout] = useState({});
-    const [selectedService, setSelectedService] = useState({
-        key: 1,
-        name: "Carpet Cleaning", 
-        photo: Images.CARPET_CLEANING, 
-        price: 400, 
-        description: "Lorem ipsum anna bore illy tha min go so min chu wal hin na kresain tu menu ary bou",
-    });
+    const [selectedService, setSelectedService] = useState({});
     const closeDropdown = (pageX, pageY) => {
         if(isDropdownOpen){
             if(pageX < dropdownLayout?.x || 
@@ -86,6 +56,21 @@ const ScheduleBooking = ({ navigation }) => {
     const showDatepicker = () => {
         showMode('date');
     };
+
+    const scheduleBooking = () => {
+        fetch('http://192.168.10.2:8000/api/scheduleBooking', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                service_id: selectedService.id,
+                date: date,
+            })
+        });
+        navigation.navigate('Booking');
+    }
 
     return (
         <View style={styles.container} onStartShouldSetResponder={({nativeEvent: {pageX, pageY}}) => closeDropdown(pageX, pageY)}>
@@ -143,6 +128,9 @@ const ScheduleBooking = ({ navigation }) => {
                     onChange={onChange}
                 />
             )}
+            <TouchableOpacity style={styles.book_btn} activeOpacity={0.8} onPress={scheduleBooking}>
+                <Text style={styles.btnText}>Book Service</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -200,8 +188,8 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderColor: Colors.DEFAULT_GREY,
         flexDirection: 'row',
-      },
-      serviceDropdown: {
+    },
+    serviceDropdown: {
         backgroundColor: Colors.DEFAULT_LIGHT,
         position: 'absolute',
         width: 280,
@@ -212,7 +200,21 @@ const styles = StyleSheet.create({
         borderColor: Colors.DEFAULT_GREY,
         zIndex: 3,
         paddingVertical: 5,
-      }
+    },
+    book_btn: {
+        marginTop: 20,
+        width: 300,
+        padding: 18,
+        backgroundColor: Colors.DEFAULT_BLUE,
+        borderRadius: 10,
+        marginHorizontal: 50,
+    },
+    btnText: {
+        color: "white",
+        fontSize: 15,
+        textAlign: 'center',
+        fontWeight: "700",
+    },
 })
 
 export default ScheduleBooking

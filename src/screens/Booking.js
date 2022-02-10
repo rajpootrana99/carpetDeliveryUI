@@ -13,7 +13,7 @@ import { Separator } from "../components";
 import { Service } from "../components";
 import { Colors } from "../contants";
 
-const bookingsURL = 'http://192.168.10.10:8000/api/fetchBookings';
+const bookingsURL = 'http://192.168.10.2:8000/api/fetchBookings';
 let repeat;
 
 const Booking = ({ navigation }) => {

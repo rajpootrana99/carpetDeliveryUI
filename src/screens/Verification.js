@@ -11,7 +11,9 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirmation}}}
   const secondInput = useRef();
   const thirdInput = useRef();
   const fourthInput = useRef();
-  const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: ''});
+  const fifthInput = useRef();
+  const sixthInput = useRef();
+  const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: '', 5: '', 6: ''});
 
   return (
     <View style={styles.container}>
@@ -71,7 +73,31 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirmation}}}
             ref={fourthInput}
             onChangeText={text => {
               setOtp({...otp, 4: text});
-              !text && thirdInput.current.focus();
+              text ? fifthInput.current.focus() : thirdInput.current.focus();
+            }}
+          />
+        </View>
+        <View style={styles.otpBox}>
+          <TextInput 
+            style={styles.otpText}
+            keyboardType="number-pad"
+            maxLength={1}
+            ref={fifthInput}
+            onChangeText={text => {
+              setOtp({...otp, 5: text});
+              text ? sixthInput.current.focus() : fourthInput.current.focus();
+            }}
+          />
+        </View>
+        <View style={styles.otpBox}>
+          <TextInput 
+            style={styles.otpText}
+            keyboardType="number-pad"
+            maxLength={1}
+            ref={sixthInput}
+            onChangeText={text => {
+              setOtp({...otp, 6: text});
+              !text && fifthInput.current.focus();
             }}
           />
         </View>
@@ -139,7 +165,7 @@ const styles = StyleSheet.create({
     color: Colors.DEFAULT_BLACK,
     padding: 0,
     textAlign: 'center',
-    paddingHorizontal: 18,
+    paddingHorizontal: 14,
     paddingVertical: 10,
   },
   login: {

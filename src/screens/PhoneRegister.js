@@ -12,7 +12,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import CountryFlag from "react-native-country-flag";
 import { FlatList } from "react-native-gesture-handler";
 import FlagItem from "../components/FlagItem";
-import firebase from "../firebase";
+// import firebase from "../firebase";
 const getDropdownStyle = (y) => ({ ...styles.countryDropdown, top: y + 60 });
 
 const PhoneRegister = ({ navigation }) => {
@@ -37,14 +37,14 @@ const PhoneRegister = ({ navigation }) => {
   };
   // Firebase Mobile Auth
   const [phoneNumber, setPhoneNumber] = useState("");
-  const { auth } = firebase();
+  // const { auth } = firebase();
   const { confirm, setConfirm } = React.useState(null);
-  const { code, setCode } = React.useState("");
-  const signInWithPhoneNumber = async (phoneNumber) => {
-    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-    setConfirm(confirmation);
-    navigation.navigate("Verification", { phoneNumber, confirmation })
-  };
+  // const { code, setCode } = React.useState("");
+  // const signInWithPhoneNumber = async (phoneNumber) => {
+  //   const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+  //   setConfirm(confirmation);
+  //   navigation.navigate("Verification", { phoneNumber, confirmation })
+  // };
   return (
     <View
       style={styles.container}
@@ -112,8 +112,8 @@ const PhoneRegister = ({ navigation }) => {
       <TouchableOpacity
         style={styles.continue}
         activeOpacity={0.8}
-        onPress={async () => {
-          signInWithPhoneNumber(phoneNumber);
+        onPress={ () => {
+          navigation.navigate("Verification", { phoneNumber, confirm });
         }}
       >
         <Text style={styles.btnText}>Continue</Text>
