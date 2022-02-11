@@ -5,6 +5,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Colors } from "../contants";
 
 const Profile = ({ navigation }) => {
+  const bearer = 'Bearer ' + global.bearerToken;
+
   const [phone, setPhone] = useState('+1 8822882288')
   const [profileEdit, setProfileEdit] = useState([
     { id: 1, name: "Call Us", icon: "ios-logo-whatsapp" },
@@ -41,6 +43,18 @@ const Profile = ({ navigation }) => {
     }
   };
 
+  const scheduleBooking = () => {
+    fetch('http://carpet.spphotography.info/api/logout', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': bearer
+        }
+    });
+    navigation.navigate('PhoneRegister');
+  }
+
   const chooseScreen = (key) => {
     if(key.id == 1){
       let phoneNumber = '';
@@ -68,7 +82,7 @@ const Profile = ({ navigation }) => {
       onShare();
     }
     if (key.id == 11){
-      navigation.navigate('PhoneRegister');
+      scheduleBooking();
     }
   }
   return (

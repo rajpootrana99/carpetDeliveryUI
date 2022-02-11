@@ -13,6 +13,8 @@ const servicesURL = 'http://carpet.spphotography.info/api/fetchServices';
 const ScheduleBooking = ({ navigation }) => {
     const bearer = 'Bearer ' + global.bearerToken;
 
+    const [loading, setLoading] = useState(true);
+
     const [carpetService, setCarpetService] = useState([]);
     const getServices = () => {
         fetch(servicesURL, {
@@ -27,9 +29,9 @@ const ScheduleBooking = ({ navigation }) => {
           .catch((error) => console.error(error))
           .finally(() => setLoading(false));
         }
-        useEffect(() => {
-            getServices();
-        }, []);
+    useEffect(() => {
+        getServices();
+    }, []);
 
     const [inputsContainerY, setInputsContainerY] = useState(0);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);

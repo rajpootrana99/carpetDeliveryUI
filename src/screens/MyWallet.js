@@ -1,10 +1,35 @@
-import React from "react";
+import React ,{ useEffect, useState} from "react";
 import { StyleSheet, Text, View, StatusBar, Image } from "react-native";
 import { Separator } from "../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Colors, Images } from "../contants";
 
+const earningURL = 'http://carpet.spphotography.info/api/user';
+
 const MyWallet = ({ navigation }) => {
+  const bearer = 'Bearer ' + global.bearerToken;
+
+  const [user, setUser] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  const getUser = () => {
+    fetch(earningURL, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Authorization': bearer
+        }
+    })
+      .then((response) => response.json())
+      .then((json) => setUser(json))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+      getUser();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Separator height={StatusBar.currentHeight} />
@@ -27,7 +52,7 @@ const MyWallet = ({ navigation }) => {
           <Text style={styles.textBold}>ME CASH</Text>
           <Text style={styles.textLight}>Applicable on all services</Text>
         </View>
-        <Text style={styles.textBold}>$ 9</Text>
+        <Text style={styles.textBold}>$ {user.balance}</Text>
       </View>
       <View style={styles.questionBox}>
         <Text style={styles.questionText}>Have a question ?</Text>

@@ -1,12 +1,50 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, TextInput } from "react-native";
 import { Separator } from "../components";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Colors } from "../contants";
 
+const addressURL = 'http://carpet.spphotography.info/api/user';
+
 const ManageAddress = ({ navigation }) => {
-    const [address, setAddress] = useState("330 Amity Rd, Woodbridge, CT, 06525")
-    const [addressInput, setAddressInput] = useState("330 Amity Rd, Woodbridge, CT, 06525")
+    const bearer = 'Bearer ' + global.bearerToken;
+
+    const [address, setAddress] = useState([])
+    const [addressInput, setAddressInput] = useState("")
+
+    const getAddress = () => {
+        fetch(addressURL, {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              'Authorization': bearer
+            }
+        })
+          .then((response) => response.json())
+          .then((json) => setAddress(json))
+          .catch((error) => console.error(error))
+          .finally(() => setLoading(false));
+          console.log(address)
+        }
+
+    useEffect(() => {
+        getAddress();
+    }, []);
+
+    const updateAddress = () => {
+        fetch('http://carpet.spphotography.info/api/updateAddress', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            },
+            body: JSON.stringify({
+                address: addressInput,
+            })
+        });
+    }
+
     return (
         <View style={styles.container}>
             <Separator height={StatusBar.currentHeight} />
@@ -25,7 +63,7 @@ const ManageAddress = ({ navigation }) => {
                     size={24}
                     color={Colors.DEFAULT_GREY}
                 />
-                <Text style={{ marginLeft: 10 }}>{ address }</Text>
+                <Text style={{ marginLeft: 10 }}>{ address.address }</Text>
             </View>
             <View style={styles.addressSection}>
                 <View style={styles.addressInput}>
@@ -37,7 +75,7 @@ const ManageAddress = ({ navigation }) => {
                     />
                 </View>
                 <TouchableOpacity style={styles.btnPrimary} activeOpacity={0.8}
-                    onPress={() => setAddress(addressInput)}>
+                    onPress={updateAddress}>
                     <Text style={styles.btnText}>Change</Text>
                 </TouchableOpacity>
             </View>

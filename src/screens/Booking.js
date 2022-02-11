@@ -18,6 +18,7 @@ let repeat;
 
 const Booking = ({ navigation }) => {
   const bearer = 'Bearer ' + global.bearerToken;
+  
   const [serviceList, setServiceList] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
