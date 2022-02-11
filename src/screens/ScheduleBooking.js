@@ -8,12 +8,20 @@ import { FlatList } from 'react-native-gesture-handler';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const getDropdownStyle = (y) => ({...styles.serviceDropdown, top: y + 60})
-const servicesURL = 'http://192.168.10.2:8000/api/fetchServices';
+const servicesURL = 'http://carpet.spphotography.info/api/fetchServices';
 
 const ScheduleBooking = ({ navigation }) => {
+    const bearer = 'Bearer ' + global.bearerToken;
+
     const [carpetService, setCarpetService] = useState([]);
     const getServices = () => {
-        fetch(servicesURL)
+        fetch(servicesURL, {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              'Authorization': bearer
+            }
+        })
           .then((response) => response.json())
           .then((json) => setCarpetService(json))
           .catch((error) => console.error(error))
@@ -58,11 +66,12 @@ const ScheduleBooking = ({ navigation }) => {
     };
 
     const scheduleBooking = () => {
-        fetch('http://192.168.10.2:8000/api/scheduleBooking', {
+        fetch('http://carpet.spphotography.info/api/scheduleBooking', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': bearer
             },
             body: JSON.stringify({
                 service_id: selectedService.id,

@@ -20,9 +20,11 @@ const { width } = Dimensions.get("window");
 const SPACING = 10;
 const THUMB_SIZE = 80;
 
-const servicesURL = 'http://192.168.10.2:8000/api/fetchServices';
+const servicesURL = 'http://carpet.spphotography.info/api/fetchServices';
 
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
+  const bearer = 'Bearer ' + global.bearerToken;
+
   const [text, setText] = useState("");
 
   const changeHandler = (val) => {
@@ -32,7 +34,13 @@ const Home = ({ navigation }) => {
   const [carpetService, setCarpetService] = useState([]);
 
   const getServices = () => {
-    fetch(servicesURL)
+    fetch(servicesURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Authorization': bearer
+      }
+    })
       .then((response) => response.json())
       .then((json) => setCarpetService(json))
       .catch((error) => console.error(error))

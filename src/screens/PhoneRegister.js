@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import { Colors, Images, CountryCode } from "../contants";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -113,7 +114,13 @@ const PhoneRegister = ({ navigation }) => {
         style={styles.continue}
         activeOpacity={0.8}
         onPress={ () => {
-          navigation.navigate("Verification", { phoneNumber, confirm });
+          if(phoneNumber < 12){
+              Alert.alert('Alert', 'Enter a valid Phone Number')
+              return;
+          }
+          else{  
+              navigation.navigate("Verification", { phoneNumber, confirm });
+          }
         }}
       >
         <Text style={styles.btnText}>Continue</Text>

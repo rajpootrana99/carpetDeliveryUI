@@ -5,12 +5,15 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { Colors } from '../contants';
 
 const ServiceDetail = ({navigation, route: {params: {selectedService}}}) => {
+    const bearer = 'Bearer ' + global.bearerToken;
+
     const createBooking = () => {
-        fetch('http://192.168.10.2:8000/api/createBooking', {
+        fetch('http://carpet.spphotography.info/api/createBooking', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': bearer
             },
             body: JSON.stringify({
                 service_id: selectedService.id,
@@ -31,7 +34,7 @@ const ServiceDetail = ({navigation, route: {params: {selectedService}}}) => {
                 <Text style={styles.headerTitle}>{selectedService.name}</Text>
             </View>
             <Image 
-                source={{ uri: 'http://192.168.10.2:8000/storage'+selectedService.image}}
+                source={{ uri: 'http://carpet.spphotography.info/storage'+selectedService.image}}
                 style={styles.serviceImage}
             />
             <Text style={styles.serviceTitle}>{selectedService.name}</Text>

@@ -5,8 +5,10 @@ import { TextInput } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors, Images } from '../contants';
 
-const Verification = ({navigation, route: {params: {phoneNumber, confirmation}}}) => {
+const authURL = 'http://carpet.spphotography.info/api/register';
 
+const Verification = ({navigation, route: {params: {phoneNumber, confirm}}}) => {
+  global.bearerToken = '';
   const firstInput = useRef();
   const secondInput = useRef();
   const thirdInput = useRef();
@@ -14,6 +16,27 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirmation}}}
   const fifthInput = useRef();
   const sixthInput = useRef();
   const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: '', 5: '', 6: ''});
+
+  const register = () => {
+    fetch(authURL, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            phone: phoneNumber,
+        })
+    })
+    .then(response => response.json())
+    .then(data => global.bearerToken = data.token);
+    if(bearerToken != ''){
+      navigation.navigate("HomeNav", { bearerToken });
+    }
+    else{
+      return;
+    }
+}
 
   return (
     <View style={styles.container}>
@@ -103,7 +126,7 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirmation}}}
         </View>
       </View>
       <TouchableOpacity style={styles.login} activeOpacity={0.8}
-        onPress={() => navigation.navigate('HomeNav')}>
+        onPress={register}>
         <Text style={styles.btnText}>Login</Text>
       </TouchableOpacity>
     </View>

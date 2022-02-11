@@ -13,15 +13,22 @@ import { Separator } from "../components";
 import { Service } from "../components";
 import { Colors } from "../contants";
 
-const bookingsURL = 'http://192.168.10.2:8000/api/fetchBookings';
+const bookingsURL = 'http://carpet.spphotography.info/api/fetchBookings';
 let repeat;
 
 const Booking = ({ navigation }) => {
+  const bearer = 'Bearer ' + global.bearerToken;
   const [serviceList, setServiceList] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   async function getBookings() {
-    await fetch(bookingsURL)
+    await fetch(bookingsURL, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Authorization': bearer
+      }
+    })
       .then((response) => response.json())
       .then((json) => setServiceList(json))
       .catch((error) => console.error(error))

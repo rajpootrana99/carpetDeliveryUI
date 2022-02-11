@@ -6,7 +6,7 @@ const ServiceList = ({id, name, image, price, description, onPress}) => {
     return (
         <TouchableOpacity style={styles.container} onPress={() => onPress({id, name, image, price, description})}>
             <Image 
-                source={{ uri: 'http://192.168.10.2:8000/storage'+image }}
+                source={{ uri: 'http://carpet.spphotography.info/storage'+image }}
                 style={styles.serviceImage}
             />
             <Text style={styles.serviceTitle}>{name}</Text>
