@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors, Images } from '../contants';
+// import firebase from "../firebase";
 
 const authURL = 'http://carpet.spphotography.info/api/register';
 
