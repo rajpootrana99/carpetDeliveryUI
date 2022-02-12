@@ -13,7 +13,8 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import CountryFlag from "react-native-country-flag";
 import { FlatList } from "react-native-gesture-handler";
 import FlagItem from "../components/FlagItem";
-// import firebase from "../firebase";
+import firebase from "../firebase";
+
 const getDropdownStyle = (y) => ({ ...styles.countryDropdown, top: y + 60 });
 
 const PhoneRegister = ({ navigation }) => {
@@ -23,7 +24,6 @@ const PhoneRegister = ({ navigation }) => {
   const [inputsContainerY, setInputsContainerY] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [dropdownLayout, setDropdownLayout] = useState({});
-  // const [phoneNumber, setPhoneNumber] = useState("");
   const closeDropdown = (pageX, pageY) => {
     if (isDropdownOpen) {
       if (
@@ -38,14 +38,12 @@ const PhoneRegister = ({ navigation }) => {
   };
   // Firebase Mobile Auth
   const [phoneNumber, setPhoneNumber] = useState("");
-  // const { auth } = firebase();
-  const { confirm, setConfirm } = React.useState(null);
-  // const { code, setCode } = React.useState("");
-  // const signInWithPhoneNumber = async (phoneNumber) => {
-  //   const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-  //   setConfirm(confirmation);
-  //   navigation.navigate("Verification", { phoneNumber, confirm })
-  // };
+
+  const { auth } = firebase();
+  const signInWithPhoneNumber = async (phoneNumber) => {
+    const confirm = await auth().signInWithPhoneNumber(phoneNumber);
+    navigation.navigate("Verification", { phoneNumber, confirm })
+  };
   return (
     <View
       style={styles.container}
@@ -119,7 +117,8 @@ const PhoneRegister = ({ navigation }) => {
               return;
           }
           else{  
-              navigation.navigate("Verification", { phoneNumber, confirm });
+              // navigation.navigate("Verification", { phoneNumber, confirm });
+              () => signInWithPhoneNumber(phoneNumber)
           }
         }}
       >

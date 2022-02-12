@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors, Images } from '../contants';
-// import firebase from "../firebase";
+import firebase from "../firebase";
 
 const authURL = 'http://carpet.spphotography.info/api/register';
 
@@ -19,15 +19,15 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirm}}}) => 
   const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: '', 5: '', 6: ''});
 
   //confirm code
-  // const { auth } = firebase();
-  // const confirmCode = async () => {
-  //   try {
-  //     await confirm.confirm(otp);
-  //     register();
-  //   } catch (error) {
-  //     Alert.alert('Alert', 'Invalid Code');
-  //   }
-  // }
+  const { auth } = firebase();
+  const confirmCode = async () => {
+    try {
+      await confirm.confirm(otp);
+      register();
+    } catch (error) {
+      Alert.alert('Alert', 'Invalid Code');
+    }
+  }
 
   const register = () => {
     fetch(authURL, {
@@ -138,7 +138,7 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirm}}}) => 
         </View>
       </View>
       <TouchableOpacity style={styles.login} activeOpacity={0.8}
-        onPress={register}>
+        onPress={() => confirmCode() }>
         <Text style={styles.btnText}>Login</Text>
       </TouchableOpacity>
     </View>
