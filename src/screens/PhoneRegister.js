@@ -44,7 +44,7 @@ const PhoneRegister = ({ navigation }) => {
   // const signInWithPhoneNumber = async (phoneNumber) => {
   //   const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
   //   setConfirm(confirmation);
-  //   navigation.navigate("Verification", { phoneNumber, confirmation })
+  //   navigation.navigate("Verification", { phoneNumber, confirm })
   // };
   return (
     <View

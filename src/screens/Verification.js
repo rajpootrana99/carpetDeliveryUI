@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useRef, useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors, Images } from '../contants';
@@ -16,6 +16,17 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirm}}}) => 
   const fifthInput = useRef();
   const sixthInput = useRef();
   const [otp, setOtp] = useState({1: '', 2: '', 3: '', 4: '', 5: '', 6: ''});
+
+  //confirm code
+  // const { auth } = firebase();
+  // const confirmCode = async () => {
+  //   try {
+  //     await confirm.confirm(otp);
+  //     register();
+  //   } catch (error) {
+  //     Alert.alert('Alert', 'Invalid Code');
+  //   }
+  // }
 
   const register = () => {
     fetch(authURL, {

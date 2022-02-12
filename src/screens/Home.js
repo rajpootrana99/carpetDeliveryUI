@@ -20,12 +20,14 @@ const { width } = Dimensions.get("window");
 const SPACING = 10;
 const THUMB_SIZE = 80;
 
+const addressURL = 'http://carpet.spphotography.info/api/user';
 const servicesURL = 'http://carpet.spphotography.info/api/fetchServices';
 
 const Home = ({navigation}) => {
   const bearer = 'Bearer ' + global.bearerToken;
 
   const [text, setText] = useState("");
+  const [user, setUser] = useState([]);
 
   const changeHandler = (val) => {
     setText(val);
@@ -46,9 +48,25 @@ const Home = ({navigation}) => {
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
     }
+
+    const getAddress = () => {
+      fetch(addressURL, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Authorization': bearer
+          }
+      })
+        .then((response) => response.json())
+        .then((json) => setUser(json))
+        .catch((error) => console.error(error))
+        .finally(() => setLoading(false));
+      }
+
     useEffect(() => {
         setLoading(true);
         getServices();
+        getAddress();
     }, []);
 
   const [images, setImages] = useState([
@@ -73,7 +91,7 @@ const Home = ({navigation}) => {
             color={Colors.DEFAULT_GREY}
           />
           <Text style={styles.textBold}>
-            330 Amity Rd, Woodbridge, CT, 06525
+            { user.address }
           </Text>
         </View>
         <View style={styles.searchInput}>
