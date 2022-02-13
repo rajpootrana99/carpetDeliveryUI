@@ -6,7 +6,6 @@ import { Colors } from '../contants';
 
 const ServiceDetail = ({navigation, route: {params: {selectedService}}}) => {
     const bearer = 'Bearer ' + global.bearerToken;
-
     const createBooking = () => {
         fetch('http://carpet.spphotography.info/api/createBooking', {
             method: 'POST',
@@ -34,7 +33,7 @@ const ServiceDetail = ({navigation, route: {params: {selectedService}}}) => {
                 <Text style={styles.headerTitle}>{selectedService.name}</Text>
             </View>
             <Image 
-                source={{ uri: 'http://carpet.spphotography.info/storage'+selectedService.image}}
+                source={{ uri: 'http://carpet.spphotography.info/storage/'+selectedService.image }}
                 style={styles.serviceImage}
             />
             <Text style={styles.serviceTitle}>{selectedService.name}</Text>

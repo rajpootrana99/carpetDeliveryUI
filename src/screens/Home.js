@@ -49,25 +49,26 @@ const Home = ({navigation}) => {
       .finally(() => setLoading(false));
     }
 
-    const getAddress = () => {
-      fetch(addressURL, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Authorization': bearer
-          }
+  const getAddress = async () => {
+    try {
+      const response = await fetch(addressURL, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Authorization': bearer
+        }
       })
-        .then((response) => response.json())
-        .then((json) => setUser(json))
-        .catch((error) => console.error(error))
-        .finally(() => setLoading(false));
-      }
+      setUser(await response.json())
+    } catch (error){
+      console.log(error);
+    }
+  }
 
-    useEffect(() => {
-        setLoading(true);
-        getServices();
-        getAddress();
-    }, []);
+  useEffect(() => {
+      setLoading(true);
+      getServices();
+      getAddress();
+  }, []);
 
   const [images, setImages] = useState([
     { id: "1", image: Images.RECTANGLE },

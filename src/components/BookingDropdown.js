@@ -9,7 +9,7 @@ const BookingDropdown = ({ id, name, image, onPress }) => {
             style={styles.container} 
             onPress={() => onPress({id, name, image})}>
             <Image 
-                source={{ uri: 'http://carpet.spphotography.info/storage'+image }}
+                source={{ uri: 'http://carpet.spphotography.info/storage/'+image }}
                 style={styles.serviceIcon}
             />
             <Text style={styles.serviceText}>{name}</Text>
