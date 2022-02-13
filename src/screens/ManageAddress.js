@@ -12,27 +12,23 @@ const ManageAddress = ({ navigation }) => {
     const [address, setAddress] = useState([])
     const [addressInput, setAddressInput] = useState("")
 
-    const getAddress = () => {
-        fetch(addressURL, {
+    const getAddress = async () => {
+        const response = await fetch(addressURL, {
             method: 'GET',
             headers: {
               Accept: 'application/json',
               'Authorization': bearer
             }
         })
-          .then((response) => response.json())
-          .then((json) => setAddress(json))
-          .catch((error) => console.error(error))
-          .finally(() => setLoading(false));
-          console.log(address)
+        setAddress(await response.json());
         }
 
     useEffect(() => {
         getAddress();
     }, []);
 
-    const updateAddress = () => {
-        fetch('http://carpet.spphotography.info/api/updateAddress', {
+    const updateAddress = async () => {
+        const res = await fetch('http://carpet.spphotography.info/api/updateAddress', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -43,6 +39,7 @@ const ManageAddress = ({ navigation }) => {
                 address: addressInput,
             })
         });
+        getAddress();
     }
 
     return (

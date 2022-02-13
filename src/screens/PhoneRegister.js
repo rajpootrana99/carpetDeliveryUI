@@ -13,7 +13,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import CountryFlag from "react-native-country-flag";
 import { FlatList } from "react-native-gesture-handler";
 import FlagItem from "../components/FlagItem";
-// import firebase from "../firebase";
+import firebase from "../firebase";
 
 const getDropdownStyle = (y) => ({ ...styles.countryDropdown, top: y + 60 });
 
@@ -39,7 +39,7 @@ const PhoneRegister = ({ navigation }) => {
   // Firebase Mobile Auth
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  const [confirm, setConfirm] = useState(null);
+  // const [confirm, setConfirm] = useState(null);
   const { auth } = firebase();
   const signInWithPhoneNumber = async (phoneNumber) => {
     const confirm = await auth().signInWithPhoneNumber(phoneNumber);

@@ -36,8 +36,8 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirm}}}) => 
     }
   }
 
-  const register = () => {
-    fetch(authURL, {
+  const register = async () => {
+    await fetch(authURL, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
