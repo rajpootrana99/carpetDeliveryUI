@@ -54,6 +54,7 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirm}}}) => 
       // navigation.navigate("HomeNav", { bearerToken });
     }
     else{
+      Alert.alert('Alert', 'No Token');
       return;
     }
 }
