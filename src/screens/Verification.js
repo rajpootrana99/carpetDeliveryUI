@@ -24,12 +24,12 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirm}}}) => 
     try {
       await confirm.confirm(otp);
       register();
-      if(bearerToken != ''){
-        navigation.navigate("HomeNav", { bearerToken });
-      }
-      else{
-        return;
-      }
+      // if(bearerToken != ''){
+      //   navigation.navigate("HomeNav", { bearerToken });
+      // }
+      // else{
+      //   return;
+      // }
     } catch (error) {
       Alert.alert('Alert', JSON.stringify(error));
       return;
@@ -49,12 +49,13 @@ const Verification = ({navigation, route: {params: {phoneNumber, confirm}}}) => 
     })
     .then(response => response.json())
     .then(data => global.bearerToken = data.token);
-    // if(bearerToken != ''){
-    //   navigation.navigate("HomeNav", { bearerToken });
-    // }
-    // else{
-    //   return;
-    // }
+    if(bearerToken != ''){
+      Alert.alert('Alert', bearerToken);
+      // navigation.navigate("HomeNav", { bearerToken });
+    }
+    else{
+      return;
+    }
 }
 
   return (
