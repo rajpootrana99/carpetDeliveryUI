@@ -2,8 +2,10 @@ import React, { useRef, useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import OTPInputView from "@twotalltotems/react-native-otp-input";
 import { Colors } from "../contants";
 import firebase from "../firebase";
+
 const authURL = "http://carpet.spphotography.info/api/register";
 
 const Verification = ({
@@ -13,13 +15,6 @@ const Verification = ({
   },
 }) => {
   global.bearerToken = "";
-  const firstInput = useRef();
-  const secondInput = useRef();
-  const thirdInput = useRef();
-  const fourthInput = useRef();
-  const fifthInput = useRef();
-  const sixthInput = useRef();
-  const [otp, setOtp] = useState({ 1: "", 2: "", 3: "", 4: "", 5: "", 6: "" });
 
   const [confirm, setConfirm] = React.useState(null);
   const [code, setCode] = React.useState("");
@@ -43,7 +38,7 @@ const Verification = ({
       await confirm.confirm(code);
       register();
     } catch (e) {
-      alert(JSON.stringify(e));
+      alert("Wrong Pin");
     }
   };
 
@@ -61,7 +56,6 @@ const Verification = ({
       .then((response) => response.json())
       .then((data) => (global.bearerToken = data.token));
     if (bearerToken != "") {
-      Alert.alert("Alert", bearerToken);
       navigation.navigate("HomeNav", { bearerToken });
     } else {
       Alert.alert("Alert", "No Token");
@@ -84,83 +78,20 @@ const Verification = ({
         We have sent you a 4 digit verification code on
       </Text>
       <Text style={styles.textNumber}>{phoneNumber}</Text>
-   
-      <TextInput value={code} onChangeText={(text) => setCode(text)} />
+      <OTPInputView
+        style={{ width: "100%", height: 200, padding: 20 }}
+        pinCount={6}
+        code={code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+        onCodeChanged={(text) => setCode(text)}
+        autoFocusOnLoad
+        codeInputFieldStyle={styles.underlineStyleBase}
+        codeInputHighlightStyle={styles.underlineStyleHighLighted}
+        onCodeFilled={(code) => {
+          console.log(`Code is ${code}, you are good to go!`);
+        }}
+      />
 
-      {/* <View style={styles.otpContainer}>
-        <View style={styles.otpBox}>
-          <TextInput
-            style={styles.otpText}
-            keyboardType="number-pad"
-            maxLength={1}
-            ref={firstInput}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 1: text });
-              text && secondInput.current.focus();
-            }}
-          />
-        </View>
-        <View style={styles.otpBox}>
-          <TextInput
-            style={styles.otpText}
-            keyboardType="number-pad"
-            maxLength={1}
-            ref={secondInput}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 2: text });
-              text ? thirdInput.current.focus() : firstInput.current.focus();
-            }}
-          />
-        </View>
-        <View style={styles.otpBox}>
-          <TextInput
-            style={styles.otpText}
-            keyboardType="number-pad"
-            maxLength={1}
-            ref={thirdInput}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 3: text });
-              text ? fourthInput.current.focus() : secondInput.current.focus();
-            }}
-          />
-        </View>
-        <View style={styles.otpBox}>
-          <TextInput
-            style={styles.otpText}
-            keyboardType="number-pad"
-            maxLength={1}
-            ref={fourthInput}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 4: text });
-              text ? fifthInput.current.focus() : thirdInput.current.focus();
-            }}
-          />
-        </View>
-        <View style={styles.otpBox}>
-          <TextInput
-            style={styles.otpText}
-            keyboardType="number-pad"
-            maxLength={1}
-            ref={fifthInput}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 5: text });
-              text ? sixthInput.current.focus() : fourthInput.current.focus();
-            }}
-          />
-        </View>
-        <View style={styles.otpBox}>
-          <TextInput
-            style={styles.otpText}
-            keyboardType="number-pad"
-            maxLength={1}
-            ref={sixthInput}
-            onChangeText={(text) => {
-              setOtp({ ...otp, 6: text });
-              !text && fifthInput.current.focus();
-            }}
-          />
-        </View>
-      </View> */}
+      {/* <TextInput value={code} onChangeText={(text) => setCode(text)} /> */}
       <TouchableOpacity
         style={styles.login}
         activeOpacity={0.8}
@@ -246,6 +177,24 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: "center",
     fontWeight: "700",
+  },
+  borderStyleBase: {
+    width: 50,
+    height: 50,
+  },
+
+  borderStyleHighLighted: {
+    borderColor: "#000000",
+  },
+
+  underlineStyleBase: {
+    width: 50,
+    height: 50,
+    borderWidth: 1,
+  },
+
+  underlineStyleHighLighted: {
+    borderColor: "#000000",
   },
 });
 
