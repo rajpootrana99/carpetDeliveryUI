@@ -1,17 +1,15 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Colors, Images } from "../contants";
+import { Colors } from "../contants";
 import firebase from "../firebase";
-
 const authURL = "http://carpet.spphotography.info/api/register";
 
 const Verification = ({
   navigation,
   route: {
-    params: { phoneNumber, confirm },
+    params: { phoneNumber },
   },
 }) => {
   global.bearerToken = "";
@@ -23,27 +21,29 @@ const Verification = ({
   const sixthInput = useRef();
   const [otp, setOtp] = useState({ 1: "", 2: "", 3: "", 4: "", 5: "", 6: "" });
 
-  // const { auth } = firebase();
-  // const signInWithPhoneNumber = async (phoneNumber) => {
-  //   const confirm = await auth().signInWithPhoneNumber(phoneNumber);
-  //   navigation.navigate("Verification", { phoneNumber, confirm })
-  // };
+  const [confirm, setConfirm] = React.useState(null);
+  const [code, setCode] = React.useState("");
 
-  //confirm code
   const { auth } = firebase();
+  useEffect(() => {
+    signInWithPhoneNumber();
+  }, []);
+
+  async function signInWithPhoneNumber() {
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      setConfirm(confirmation);
+    } catch (e) {
+      alert(JSON.stringify(e));
+    }
+  }
+
   const confirmCode = async () => {
     try {
-      await confirm.confirm(otp);
+      await confirm.confirm(code);
       register();
-      // if(bearerToken != ''){
-      //   navigation.navigate("HomeNav", { bearerToken });
-      // }
-      // else{
-      //   return;
-      // }
-    } catch (error) {
-      Alert.alert("Alert", JSON.stringify(error));
-      return;
+    } catch (e) {
+      alert(JSON.stringify(e));
     }
   };
 
@@ -62,7 +62,7 @@ const Verification = ({
       .then((data) => (global.bearerToken = data.token));
     if (bearerToken != "") {
       Alert.alert("Alert", bearerToken);
-      // navigation.navigate("HomeNav", { bearerToken });
+      navigation.navigate("HomeNav", { bearerToken });
     } else {
       Alert.alert("Alert", "No Token");
       return;
@@ -84,7 +84,10 @@ const Verification = ({
         We have sent you a 4 digit verification code on
       </Text>
       <Text style={styles.textNumber}>{phoneNumber}</Text>
-      <View style={styles.otpContainer}>
+   
+      <TextInput value={code} onChangeText={(text) => setCode(text)} />
+
+      {/* <View style={styles.otpContainer}>
         <View style={styles.otpBox}>
           <TextInput
             style={styles.otpText}
@@ -157,7 +160,7 @@ const Verification = ({
             }}
           />
         </View>
-      </View>
+      </View> */}
       <TouchableOpacity
         style={styles.login}
         activeOpacity={0.8}
